@@ -1,0 +1,264 @@
+{
+	"schemaVersion": "4",
+	"info": {
+		"name": "mysqlemployees-findAndModify",
+		"description": "Find and modify mysql/employees"
+	},
+	"parameter": {
+		"properties": {
+			"params": {
+				"type": "object",
+				"description": "The parameters from the endpoint.",
+				"properties": {
+					"limit": {
+						"type": "number",
+						"description": "The number of records to fetch. The value must be greater than 0, and no greater than 1000."
+					},
+					"skip": {
+						"type": "number",
+						"description": "The number of records to skip. The value must not be less than 0."
+					},
+					"where": {
+						"type": "string",
+						"description": "Constrains values for fields. The value should be encoded JSON."
+					},
+					"order": {
+						"type": "string",
+						"description": "A dictionary of one or more fields specifying sorting of results. In general, you can sort based on any predefined field that you can query using the where operator, as well as on custom fields. The value should be encoded JSON."
+					},
+					"sel": {
+						"type": "string",
+						"description": "Selects which fields to return from the query. Others are excluded. The value should be encoded JSON."
+					},
+					"unsel": {
+						"type": "string",
+						"description": "Selects which fields to not return from the query. Others are included. The value should be encoded JSON."
+					},
+					"data": {
+						"$ref": "schema:///model/mysql%2Femployees",
+						"description": "The mysql/employees to use for the update."
+					},
+					"new": {
+						"type": "boolean",
+						"default": false,
+						"description": "Set to true to return the new model instead of the original model."
+					},
+					"upsert": {
+						"type": "boolean",
+						"default": false,
+						"description": "Set to true to allow the method to create a new model."
+					}
+				},
+				"required": [
+					"data"
+				]
+			},
+			"request": {
+				"type": "object",
+				"description": "The HTTP request."
+			},
+			"config": {
+				"type": "object",
+				"description": "The service's configuration"
+			},
+			"env": {
+				"type": "object",
+				"description": "The host OS environment"
+			}
+		},
+		"additionalProperties": false,
+		"required": [
+			"params",
+			"request",
+			"config",
+			"env"
+		]
+	},
+	"start": "params.buildargs.1",
+	"nodes": {
+		"params.buildargs.1": {
+			"type": "nodehandler://axway-flow/setcontext",
+			"method": "setcontext",
+			"name": "Build args parameter (new)",
+			"parameters": [
+				{
+					"name": "value",
+					"value": "$.params.new",
+					"metaName": "Value"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.params.args.new",
+					"routes": [
+						"params.buildargs.2"
+					],
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set Context"
+		},
+		"params.buildargs.2": {
+			"type": "nodehandler://axway-flow/setcontext",
+			"method": "setcontext",
+			"name": "Build args parameter (upsert)",
+			"parameters": [
+				{
+					"name": "value",
+					"value": "$.params.upsert",
+					"metaName": "Value"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.params.args.upsert",
+					"routes": [
+						"model.findAndModify"
+					],
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set Context"
+		},
+		"model.findAndModify": {
+			"type": "nodehandler://api-builder-flow-invoke/model/mysql/employees",
+			"method": "findAndModify",
+			"name": "Find and modify employees",
+			"parameters": [
+				{
+					"name": "data",
+					"value": "$.params.data",
+					"metaName": "data"
+				},
+				{
+					"name": "args",
+					"value": "$.params.args",
+					"metaName": "args",
+					"metaDescription": "Optional parameters."
+				},
+				{
+					"name": "limit",
+					"value": "$.params.limit",
+					"metaName": "limit",
+					"metaDescription": "The number of records to fetch."
+				},
+				{
+					"name": "skip",
+					"value": "$.params.skip",
+					"metaName": "skip",
+					"metaDescription": "The number of records to skip."
+				},
+				{
+					"name": "where",
+					"value": "$.params.where",
+					"metaName": "where",
+					"metaDescription": "JSON-encoded object specifying field constraints. The field name is the key and the value is the constraint statement or value."
+				},
+				{
+					"name": "order",
+					"value": "$.params.order",
+					"metaName": "order",
+					"metaDescription": "A dictionary of key-value pairs describing the field(s) for sorting. The field name is the key and the value is set to either -1 for ascending order or 1 for descending order."
+				},
+				{
+					"name": "sel",
+					"value": "$.params.sel",
+					"metaName": "sel",
+					"metaDescription": "A dictionary of key-value pairs describing which fields to include in the query results. The field name is the key and the value is set to 1."
+				},
+				{
+					"name": "unsel",
+					"value": "$.params.unsel",
+					"metaName": "unsel",
+					"metaDescription": "A dictionary of key-value pairs describing which fields to exclude from the query results. The field name is the key and the value is set to 1."
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.model",
+					"routes": [
+						"response.success"
+					],
+					"metaName": "Next"
+				},
+				"notfound": {
+					"routes": [
+						"response.error.notfound"
+					],
+					"metaName": "Not Found"
+				},
+				"error": {
+					"context": "$.error",
+					"routes": [
+						"response.error"
+					],
+					"metaName": "Error"
+				}
+			},
+			"metaMethod": "Find and modify"
+		},
+		"response.success": {
+			"type": "nodehandler://axway-flow/http",
+			"name": "Success (HTTP 200)",
+			"method": "setresponse",
+			"parameters": [
+				{
+					"name": "status",
+					"value": "204",
+					"type": "number",
+					"metaName": "Status",
+					"metaDescription": "The HTTP status code"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.response",
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set HTTP Response"
+		},
+		"response.error.notfound": {
+			"type": "nodehandler://axway-flow/http",
+			"name": "Not Found (HTTP 404)",
+			"method": "setresponse",
+			"parameters": [
+				{
+					"name": "status",
+					"value": "404",
+					"type": "number",
+					"metaName": "Status",
+					"metaDescription": "The HTTP status code"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.response",
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set HTTP Response"
+		},
+		"response.error": {
+			"type": "nodehandler://axway-flow/http",
+			"name": "Bad Request (HTTP 400)",
+			"method": "setresponse",
+			"parameters": [
+				{
+					"name": "status",
+					"value": "400",
+					"type": "number",
+					"metaName": "Status",
+					"metaDescription": "The HTTP status code"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.response",
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set HTTP Response"
+		}
+	}
+}

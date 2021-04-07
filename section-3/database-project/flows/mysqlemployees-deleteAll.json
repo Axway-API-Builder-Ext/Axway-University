@@ -1,0 +1,101 @@
+{
+	"schemaVersion": "4",
+	"info": {
+		"name": "mysqlemployees-deleteAll",
+		"description": "Delete all mysql/employees"
+	},
+	"parameter": {
+		"properties": {
+			"params": {
+				"type": "object",
+				"description": "The parameters from the endpoint."
+			},
+			"request": {
+				"type": "object",
+				"description": "The HTTP request."
+			},
+			"config": {
+				"type": "object",
+				"description": "The service's configuration"
+			},
+			"env": {
+				"type": "object",
+				"description": "The host OS environment"
+			}
+		},
+		"additionalProperties": false,
+		"required": [
+			"params",
+			"request",
+			"config",
+			"env"
+		]
+	},
+	"start": "model.deleteall",
+	"nodes": {
+		"model.deleteall": {
+			"type": "nodehandler://api-builder-flow-invoke/model/mysql/employees",
+			"method": "deleteAll",
+			"name": "Delete all employees",
+			"parameters": [],
+			"outputs": {
+				"next": {
+					"routes": [
+						"response.success"
+					],
+					"metaName": "Next"
+				},
+				"error": {
+					"context": "$.error",
+					"routes": [
+						"response.error"
+					],
+					"metaName": "Error"
+				}
+			},
+			"metaMethod": "Delete all"
+		},
+		"response.success": {
+			"type": "nodehandler://axway-flow/http",
+			"name": "Success (HTTP 200)",
+			"method": "setresponse",
+			"parameters": [
+				{
+					"name": "status",
+					"value": "204",
+					"type": "number",
+					"metaName": "Status",
+					"metaDescription": "The HTTP status code"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.response",
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set HTTP Response"
+		},
+		"response.error": {
+			"type": "nodehandler://axway-flow/http",
+			"name": "Bad Request (HTTP 400)",
+			"method": "setresponse",
+			"parameters": [
+				{
+					"name": "status",
+					"value": "400",
+					"type": "number",
+					"metaName": "Status",
+					"metaDescription": "The HTTP status code"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.response",
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set HTTP Response"
+		}
+	}
+}
