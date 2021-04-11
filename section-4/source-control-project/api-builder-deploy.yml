@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greeting-deployment
+  labels:
+    app: greeting-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: greeting-app
+  template:
+    metadata:
+      labels:
+        app: greeting-app
+    spec:
+      containers:
+      - name: greeting-app
+        image: cmcgovern/api-builder-image:latest
+        ports:
+        - containerPort: 3000
