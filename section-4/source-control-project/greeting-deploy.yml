@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: greeting-app
-        image: cmcgovern/api-builder-image:latest
+        image: cmcgovern/greeting-image:latest
         ports:
-        - containerPort: 3000
+        - containerPort: 8080
