@@ -1,0 +1,9 @@
+triggers:
+  cron-1:
+    name: Cron
+    parameters:
+      cronExpression: 30 * * * * *
+    enabled: true
+    invoke:
+      flow: NewFlow
+      parameters: {}

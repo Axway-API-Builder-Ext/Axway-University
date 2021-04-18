@@ -1,0 +1,8 @@
+triggers: {}
+channels:
+  kafka:
+    enabled: true
+    name: Kafka Consumer
+    parameters:
+      brokers: 'localhost:9092'
+      clientId: apibuilder

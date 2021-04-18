@@ -1,0 +1,155 @@
+{
+	"schemaVersion": "4",
+	"info": {
+		"name": "Scheduled Weather",
+		"description": ""
+	},
+	"parameter": {
+		"properties": {
+			"request": {
+				"description": "The request"
+			},
+			"config": {
+				"type": "object",
+				"description": "The service's configuration"
+			},
+			"env": {
+				"type": "object",
+				"description": "The host OS environment"
+			}
+		},
+		"additionalProperties": false
+	},
+	"start": "setcontext.1",
+	"nodes": {
+		"open-weather.1": {
+			"type": "nodehandler://api-builder-plugin-open-weather/open-weather",
+			"name": "CurrentWeatherData",
+			"method": "CurrentWeatherData",
+			"parameters": [
+				{
+					"name": "q",
+					"type": "jsonpath",
+					"value": "$.city",
+					"metaName": "q",
+					"metaDescription": "**City name**. *Example: London*. You can call by city name, or by city name and country code. The API responds with a list of results that match a searching word. For the query value, type the city name and optionally the country code divided by comma; use ISO 3166 country codes."
+				}
+			],
+			"outputs": {
+				"200": {
+					"context": "$.response",
+					"routes": [
+						"logger.1"
+					],
+					"metaName": "200"
+				},
+				"404": {
+					"context": "$.response",
+					"routes": [
+						"logger.2"
+					],
+					"metaName": "404"
+				},
+				"error": {
+					"context": "$.error",
+					"routes": [
+						"logger.2"
+					],
+					"metaName": "Error"
+				},
+				"default": {
+					"context": "$.response",
+					"routes": [
+						"logger.2"
+					],
+					"metaName": "Default"
+				}
+			},
+			"authorizations": [
+				{
+					"name": "app_id",
+					"type": "credential",
+					"value": "OpenWeatherMap API app_id"
+				}
+			],
+			"metaMethod": "CurrentWeatherData"
+		},
+		"logger.1": {
+			"type": "nodehandler://@axway/api-builder-plugin-fn-logger/logger",
+			"name": "Log Message",
+			"method": "log",
+			"parameters": [
+				{
+					"name": "message",
+					"type": "jsonpath",
+					"value": "$.response.data.weather.0.description",
+					"metaName": "Message",
+					"metaDescription": "The log message."
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": null,
+					"routes": [],
+					"metaName": "Next"
+				},
+				"error": {
+					"context": "$.error",
+					"routes": [],
+					"metaName": "Error"
+				}
+			},
+			"metaMethod": "Log Message"
+		},
+		"logger.2": {
+			"type": "nodehandler://@axway/api-builder-plugin-fn-logger/logger",
+			"name": "Log Message",
+			"method": "log",
+			"parameters": [
+				{
+					"name": "message",
+					"type": "string",
+					"value": "\"Something went wrong\"",
+					"metaName": "Message",
+					"metaDescription": "The log message."
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": null,
+					"routes": [],
+					"metaName": "Next"
+				},
+				"error": {
+					"context": "$.error",
+					"routes": [],
+					"metaName": "Error"
+				}
+			},
+			"metaMethod": "Log Message"
+		},
+		"setcontext.1": {
+			"type": "nodehandler://axway-flow/setcontext",
+			"name": "Set Context",
+			"method": "setcontext",
+			"parameters": [
+				{
+					"name": "value",
+					"type": "string",
+					"value": "\"Madrid\"",
+					"metaName": "Value"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.city",
+					"routes": [
+						"open-weather.1"
+					],
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set Context"
+		}
+	}
+}
