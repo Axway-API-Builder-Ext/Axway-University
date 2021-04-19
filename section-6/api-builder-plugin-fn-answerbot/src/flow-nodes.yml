@@ -1,0 +1,42 @@
+flow-nodes:
+  fn-answerbot:
+    name: answerbot
+    icon: icon.svg
+    description: Give me a piece of text and a natural language question and I'll answer it.
+    category: general
+    methods:
+      answer:
+        name: Answer question
+        description: Answers question.
+        parameters:
+          question:
+            name: Question
+            description: The natural language question to ask.
+            required: true
+            initialType: string
+            schema:
+              type: string
+          text:
+            name: Text
+            description: The natural language text to ask questions of.
+            required: true
+            initialType: string
+            schema:
+              type: string
+        # "Next" (next) output
+        returns:
+          name: Next
+          description: The operation was successful.
+          context: $.answer
+          schema:
+            type: array
+        # "Error" (error) output
+        throws:
+          name: Error
+          description: An unexpected error was encountered.
+          context: $.error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string

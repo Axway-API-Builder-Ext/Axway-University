@@ -1,0 +1,20 @@
+triggers:
+  kafka-1:
+    name: Kafka Consumer
+    parameters:
+      groupId: answerservicegroup
+      messageFormat: JSON
+      topic: questions
+    enabled: true
+    invoke:
+      flow: NewFlow
+      parameters:
+        request: $
+    channel: kafka
+channels:
+  kafka:
+    enabled: true
+    name: Kafka Consumer
+    parameters:
+      brokers: 'localhost:9092'
+      clientId: answerservice
