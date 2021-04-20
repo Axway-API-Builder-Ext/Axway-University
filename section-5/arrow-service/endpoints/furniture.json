@@ -1,0 +1,576 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "furniture",
+    "description": "The furniture REST API",
+    "version": "1.0.0"
+  },
+  "basePath": "/endpoints",
+  "paths": {
+    "/furniture": {
+      "post": {
+        "responses": {
+          "201": {
+            "description": "The create succeeded.",
+            "headers": {
+              "Location": {
+                "description": "The URL to the newly created instance.",
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "No results were found."
+          },
+          "500": {
+            "description": "Something went wrong during the request; check out the logs on your server."
+          }
+        },
+        "description": "Create a furniture",
+        "operationId": "Create furniture",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Create body",
+            "schema": {
+              "$ref": "schema:///model/furniture"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "furniture"
+        ],
+        "x-flow": "furniture-create"
+      },
+      "delete": {
+        "responses": {
+          "204": {
+            "description": "The delete succeeded."
+          },
+          "404": {
+            "description": "No results were found."
+          },
+          "500": {
+            "description": "Something went wrong during the request; check out the logs on your server."
+          }
+        },
+        "description": "Deletes all furnitures",
+        "operationId": "Delete All furniture",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "furniture"
+        ],
+        "x-flow": "furniture-deleteAll"
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "description": "The find all succeeded, and the results are available.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "schema:///model/furniture-full"
+              }
+            }
+          },
+          "404": {
+            "description": "No results were found."
+          },
+          "500": {
+            "description": "Something went wrong during the request; check out the logs on your server."
+          }
+        },
+        "description": "Find all furniture",
+        "operationId": "Find All furniture",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "furniture"
+        ],
+        "x-flow": "furniture-findAll"
+      }
+    },
+    "/furniture/{id}": {
+      "put": {
+        "responses": {
+          "204": {
+            "description": "The update succeeded."
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "No results were found."
+          },
+          "500": {
+            "description": "Something went wrong during the request; check out the logs on your server."
+          }
+        },
+        "description": "Update a furniture",
+        "operationId": "Update furniture",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The furniture ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Update body",
+            "schema": {
+              "$ref": "schema:///model/furniture"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "furniture"
+        ],
+        "x-flow": "furniture-update"
+      },
+      "delete": {
+        "responses": {
+          "204": {
+            "description": "The delete succeeded."
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "No results were found."
+          },
+          "500": {
+            "description": "Something went wrong during the request; check out the logs on your server."
+          }
+        },
+        "description": "Delete a specific furniture",
+        "operationId": "Delete One furniture",
+        "consumes": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The furniture ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "furniture"
+        ],
+        "x-flow": "furniture-delete"
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "description": "The find succeeded, and the results are available.",
+            "schema": {
+              "$ref": "schema:///model/furniture-full"
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "No results were found."
+          },
+          "500": {
+            "description": "Something went wrong during the request; check out the logs on your server."
+          }
+        },
+        "description": "Find one furniture",
+        "operationId": "Find By ID furniture",
+        "consumes": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The furniture ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "furniture"
+        ],
+        "x-flow": "furniture-findByID"
+      }
+    },
+    "/furniture/distinct/{field}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Distinct fields response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "No results were found."
+          },
+          "500": {
+            "description": "Something went wrong during the request; check out the logs on your server."
+          }
+        },
+        "description": "Find distinct furniture",
+        "operationId": "Distinct furniture",
+        "consumes": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "field",
+            "description": "The field name that must be distinct.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "The number of records to fetch. The value must be greater than 0, and no greater than 1000.",
+            "required": false,
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          {
+            "in": "query",
+            "name": "skip",
+            "description": "The number of records to skip. The value must not be less than 0.",
+            "required": false,
+            "type": "number",
+            "minimum": 0
+          },
+          {
+            "in": "query",
+            "name": "where",
+            "description": "Constrains values for fields. The value should be encoded JSON.",
+            "required": false,
+            "type": "string",
+            "format": "json"
+          },
+          {
+            "in": "query",
+            "name": "order",
+            "description": "A dictionary of one or more fields specifying sorting of results. In general, you can sort based on any predefined field that you can query using the where operator, as well as on custom fields. The value should be encoded JSON.",
+            "required": false,
+            "type": "string",
+            "format": "json"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "furniture"
+        ],
+        "x-flow": "furniture-distinct"
+      }
+    },
+    "/furniture/findAndModify": {
+      "put": {
+        "responses": {
+          "204": {
+            "description": "The find and modify succeeded."
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "No results were found."
+          },
+          "500": {
+            "description": "Something went wrong during the request; check out the logs on your server."
+          }
+        },
+        "description": "Modifies a single furniture. Although the query may match multiple furnitures, only the first one will be modified.",
+        "operationId": "Find and Modify furniture",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Find and modify body",
+            "schema": {
+              "$ref": "schema:///model/furniture"
+            }
+          },
+          {
+            "name": "upsert",
+            "in": "query",
+            "type": "boolean",
+            "description": "Set to true to allow the method to create a new model."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "The number of records to fetch. The value must be greater than 0, and no greater than 1000.",
+            "required": false,
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          {
+            "in": "query",
+            "name": "skip",
+            "description": "The number of records to skip. The value must not be less than 0.",
+            "required": false,
+            "type": "number",
+            "minimum": 0
+          },
+          {
+            "in": "query",
+            "name": "where",
+            "description": "Constrains values for fields. The value should be encoded JSON.",
+            "required": false,
+            "type": "string",
+            "format": "json"
+          },
+          {
+            "in": "query",
+            "name": "order",
+            "description": "A dictionary of one or more fields specifying sorting of results. In general, you can sort based on any predefined field that you can query using the where operator, as well as on custom fields. The value should be encoded JSON.",
+            "required": false,
+            "type": "string",
+            "format": "json"
+          },
+          {
+            "in": "query",
+            "name": "sel",
+            "description": "Selects which fields to return from the query. Others are excluded. The value should be encoded JSON.",
+            "required": false,
+            "type": "string",
+            "format": "json"
+          },
+          {
+            "in": "query",
+            "name": "unsel",
+            "description": "Selects which fields to not return from the query. Others are included. The value should be encoded JSON.",
+            "required": false,
+            "type": "string",
+            "format": "json"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "furniture"
+        ],
+        "x-flow": "furniture-findAndModify"
+      }
+    },
+    "/furniture/count": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "The count succeeded, and the results are available.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "No results were found."
+          },
+          "500": {
+            "description": "Something went wrong during the request; check out the logs on your server."
+          }
+        },
+        "description": "Count a furniture",
+        "operationId": "Count furniture",
+        "consumes": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "where",
+            "description": "Constrains values for fields. The value should be encoded JSON.",
+            "required": false,
+            "type": "string",
+            "format": "json"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "furniture"
+        ],
+        "x-flow": "furniture-count"
+      }
+    },
+    "/furniture/upsert": {
+      "post": {
+        "responses": {
+          "201": {
+            "description": "The upsert succeeded, and resulted in an insert.",
+            "headers": {
+              "Location": {
+                "description": "The URL to the newly created instance.",
+                "type": "string"
+              }
+            }
+          },
+          "204": {
+            "description": "The upsert succeeded, and resulted in an update."
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "No results were found."
+          },
+          "500": {
+            "description": "Something went wrong during the request; check out the logs on your server."
+          }
+        },
+        "description": "Create or update a furniture",
+        "operationId": "Upsert furniture",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Upsert body",
+            "schema": {
+              "$ref": "schema:///model/furniture-full"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "furniture"
+        ],
+        "x-flow": "furniture-upsert"
+      }
+    },
+    "/furniture/query": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "The query succeeded, and the results are available.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "schema:///model/furniture-full"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "No results were found."
+          },
+          "500": {
+            "description": "Something went wrong during the request; check out the logs on your server."
+          }
+        },
+        "description": "Query a furniture",
+        "operationId": "Query furniture",
+        "consumes": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "The number of records to fetch. The value must be greater than 0, and no greater than 1000.",
+            "required": false,
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          {
+            "in": "query",
+            "name": "skip",
+            "description": "The number of records to skip. The value must not be less than 0.",
+            "required": false,
+            "type": "number",
+            "minimum": 0
+          },
+          {
+            "in": "query",
+            "name": "where",
+            "description": "Constrains values for fields. The value should be encoded JSON.",
+            "required": false,
+            "type": "string",
+            "format": "json"
+          },
+          {
+            "in": "query",
+            "name": "order",
+            "description": "A dictionary of one or more fields specifying sorting of results. In general, you can sort based on any predefined field that you can query using the where operator, as well as on custom fields. The value should be encoded JSON.",
+            "required": false,
+            "type": "string",
+            "format": "json"
+          },
+          {
+            "in": "query",
+            "name": "sel",
+            "description": "Selects which fields to return from the query. Others are excluded. The value should be encoded JSON.",
+            "required": false,
+            "type": "string",
+            "format": "json"
+          },
+          {
+            "in": "query",
+            "name": "unsel",
+            "description": "Selects which fields to not return from the query. Others are included. The value should be encoded JSON.",
+            "required": false,
+            "type": "string",
+            "format": "json"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "furniture"
+        ],
+        "x-flow": "furniture-query"
+      }
+    }
+  }
+}

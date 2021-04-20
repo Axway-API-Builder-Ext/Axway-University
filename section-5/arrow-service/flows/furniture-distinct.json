@@ -1,0 +1,164 @@
+{
+	"schemaVersion": "4",
+	"info": {
+		"name": "furniture-distinct",
+		"description": "Get distinct records of furniture"
+	},
+	"parameter": {
+		"properties": {
+			"params": {
+				"type": "object",
+				"description": "The parameters from the endpoint.",
+				"properties": {
+					"limit": {
+						"type": "number",
+						"description": "The number of records to fetch. The value must be greater than 0, and no greater than 1000."
+					},
+					"skip": {
+						"type": "number",
+						"description": "The number of records to skip. The value must not be less than 0."
+					},
+					"where": {
+						"type": "string",
+						"description": "Constrains values for fields. The value should be encoded JSON."
+					},
+					"order": {
+						"type": "string",
+						"description": "A dictionary of one or more fields specifying sorting of results. In general, you can sort based on any predefined field that you can query using the where operator, as well as on custom fields. The value should be encoded JSON."
+					},
+					"field": {
+						"type": "string",
+						"description": "The field name that must be distinct."
+					}
+				},
+				"required": [
+					"field"
+				]
+			},
+			"request": {
+				"type": "object",
+				"description": "The HTTP request."
+			},
+			"config": {
+				"type": "object",
+				"description": "The service's configuration"
+			},
+			"env": {
+				"type": "object",
+				"description": "The host OS environment"
+			}
+		},
+		"additionalProperties": false,
+		"required": [
+			"params",
+			"request",
+			"config",
+			"env"
+		]
+	},
+	"start": "model.distinct",
+	"nodes": {
+		"model.distinct": {
+			"type": "nodehandler://api-builder-flow-invoke/model/furniture",
+			"method": "distinct",
+			"name": "Find distinct furnitures",
+			"parameters": [
+				{
+					"name": "limit",
+					"value": "$.params.limit",
+					"metaName": "limit",
+					"metaDescription": "The number of records to fetch."
+				},
+				{
+					"name": "skip",
+					"value": "$.params.skip",
+					"metaName": "skip",
+					"metaDescription": "The number of records to skip."
+				},
+				{
+					"name": "where",
+					"value": "$.params.where",
+					"metaName": "where",
+					"metaDescription": "JSON-encoded object specifying field constraints. The field name is the key and the value is the constraint statement or value."
+				},
+				{
+					"name": "order",
+					"value": "$.params.order",
+					"metaName": "order",
+					"metaDescription": "A dictionary of key-value pairs describing the field(s) for sorting. The field name is the key and the value is set to either -1 for ascending order or 1 for descending order."
+				},
+				{
+					"name": "field",
+					"value": "$.params.field",
+					"metaName": "field",
+					"metaDescription": "The field that must be distinct."
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.models",
+					"routes": [
+						"response.success"
+					],
+					"metaName": "Next"
+				},
+				"error": {
+					"context": "$.error",
+					"routes": [
+						"response.error"
+					],
+					"metaName": "Error"
+				}
+			},
+			"metaMethod": "Distinct"
+		},
+		"response.success": {
+			"type": "nodehandler://axway-flow/http",
+			"name": "Success (HTTP 200)",
+			"method": "setresponse",
+			"parameters": [
+				{
+					"name": "status",
+					"value": "200",
+					"type": "number",
+					"metaName": "Status",
+					"metaDescription": "The HTTP status code"
+				},
+				{
+					"name": "body",
+					"value": "$.models",
+					"metaName": "Body",
+					"metaDescription": "The response payload"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.response",
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set HTTP Response"
+		},
+		"response.error": {
+			"type": "nodehandler://axway-flow/http",
+			"name": "Bad Request (HTTP 400)",
+			"method": "setresponse",
+			"parameters": [
+				{
+					"name": "status",
+					"value": "400",
+					"type": "number",
+					"metaName": "Status",
+					"metaDescription": "The HTTP status code"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.response",
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set HTTP Response"
+		}
+	}
+}

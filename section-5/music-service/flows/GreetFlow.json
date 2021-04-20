@@ -1,0 +1,179 @@
+{
+	"schemaVersion": "4",
+	"info": {
+		"name": "Greet flow",
+		"description": "Greets a user",
+		"author": "support@axway.com",
+		"license": "ISC"
+	},
+	"parameter": {
+		"properties": {
+			"params": {
+				"type": "object",
+				"description": "The parameters from the endpoint.",
+				"properties": {
+					"username": {
+						"type": "string",
+						"description": "The username"
+					}
+				},
+				"additionalProperties": false,
+				"required": [
+					"username"
+				]
+			},
+			"request": {
+				"type": "object",
+				"description": "The HTTP request."
+			},
+			"config": {
+				"type": "object",
+				"description": "The service's configuration"
+			},
+			"env": {
+				"type": "object",
+				"description": "The host OS environment"
+			}
+		},
+		"additionalProperties": false,
+		"required": [
+			"params",
+			"request",
+			"config",
+			"env"
+		]
+	},
+	"start": "condition.1",
+	"nodes": {
+		"response.success": {
+			"type": "nodehandler://axway-flow/http",
+			"name": "Success (HTTP 200)",
+			"method": "setresponse",
+			"parameters": [
+				{
+					"name": "status",
+					"value": "200",
+					"type": "number",
+					"metaName": "Status",
+					"metaDescription": "The HTTP status code"
+				},
+				{
+					"name": "body",
+					"type": "jsonpath",
+					"value": "$.response.data",
+					"metaName": "Body",
+					"metaDescription": "The response payload"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.response",
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set HTTP Response"
+		},
+		"response.error": {
+			"type": "nodehandler://axway-flow/http",
+			"name": "Bad Request (HTTP 400)",
+			"method": "setresponse",
+			"parameters": [
+				{
+					"name": "status",
+					"value": "400",
+					"type": "number",
+					"metaName": "Status",
+					"metaDescription": "The HTTP status code"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.response",
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set HTTP Response"
+		},
+		"condition.1": {
+			"type": "nodehandler://axway-flow/condition",
+			"name": "Check Username",
+			"method": "exists",
+			"parameters": [
+				{
+					"name": "source",
+					"value": "$.params.username",
+					"metaName": "Source",
+					"metaDescription": "The input to test."
+				}
+			],
+			"outputs": {
+				"true": {
+					"context": "$.exists",
+					"routes": [
+						"musicalinstrumentsapi-test-runtime.1"
+					],
+					"metaName": "True"
+				},
+				"false": {
+					"context": "$.exists",
+					"routes": [
+						"response.error"
+					],
+					"metaName": "False"
+				}
+			},
+			"metaMethod": "Exists"
+		},
+		"musicalinstrumentsapi-test-runtime.1": {
+			"type": "nodehandler://@axway/api-builder-plugin-fn-swagger/musicalinstrumentsapi-test-runtime",
+			"name": "FindInstruments",
+			"method": "FindInstruments",
+			"parameters": [],
+			"outputs": {
+				"200": {
+					"routes": [
+						"response.success"
+					],
+					"context": "$.response",
+					"metaName": "200"
+				},
+				"401": {
+					"routes": [
+						"response.error"
+					],
+					"context": "$.response",
+					"metaName": "401"
+				},
+				"404": {
+					"routes": [
+						"response.error"
+					],
+					"context": "$.response",
+					"metaName": "404"
+				},
+				"500": {
+					"routes": [
+						"response.error"
+					],
+					"context": "$.response",
+					"metaName": "500"
+				},
+				"error": {
+					"routes": [
+						"response.error"
+					],
+					"context": "$.error",
+					"metaName": "Error"
+				},
+				"default": {
+					"routes": [
+						"response.error"
+					],
+					"context": "$.response",
+					"metaName": "Default"
+				}
+			},
+			"metaMethod": "FindInstruments"
+		}
+	}
+}

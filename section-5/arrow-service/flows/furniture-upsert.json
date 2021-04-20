@@ -1,0 +1,173 @@
+{
+	"schemaVersion": "4",
+	"info": {
+		"name": "furniture-upsert",
+		"description": "Upsert furniture"
+	},
+	"parameter": {
+		"properties": {
+			"params": {
+				"type": "object",
+				"description": "The parameters from the endpoint.",
+				"properties": {
+					"data": {
+						"$ref": "schema:///model/furniture-full",
+						"description": "The furniture to upsert"
+					}
+				},
+				"required": [
+					"data"
+				]
+			},
+			"request": {
+				"type": "object",
+				"description": "The HTTP request."
+			},
+			"config": {
+				"type": "object",
+				"description": "The service's configuration"
+			},
+			"env": {
+				"type": "object",
+				"description": "The host OS environment"
+			}
+		},
+		"additionalProperties": false,
+		"required": [
+			"params",
+			"request",
+			"config",
+			"env"
+		]
+	},
+	"start": "model.upsert",
+	"nodes": {
+		"model.upsert": {
+			"type": "nodehandler://api-builder-flow-invoke/model/furniture",
+			"method": "upsert",
+			"name": "Upsert furniture",
+			"parameters": [
+				{
+					"name": "data",
+					"value": "$.params.data",
+					"metaName": "data"
+				}
+			],
+			"outputs": {
+				"insert": {
+					"context": "$.model",
+					"routes": [
+						"set.headers.location"
+					],
+					"metaName": "Insert"
+				},
+				"update": {
+					"context": "$.model",
+					"routes": [
+						"update.success"
+					],
+					"metaName": "Update"
+				},
+				"error": {
+					"context": "$.error",
+					"routes": [
+						"response.error"
+					],
+					"metaName": "Error"
+				}
+			},
+			"metaMethod": "Upsert"
+		},
+		"set.headers.location": {
+			"type": "nodehandler://axway-flow/setcontext",
+			"method": "setcontext",
+			"name": "Set Location",
+			"parameters": [
+				{
+					"name": "value",
+					"value": "$.model.id",
+					"metaName": "Value"
+				}
+			],
+			"outputs": {
+				"next": {
+					"routes": [
+						"insert.success"
+					],
+					"context": "$.headers.location",
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set Context"
+		},
+		"insert.success": {
+			"type": "nodehandler://axway-flow/http",
+			"name": "Created (HTTP 201)",
+			"method": "setresponse",
+			"parameters": [
+				{
+					"name": "status",
+					"value": "201",
+					"type": "number",
+					"metaName": "Status",
+					"metaDescription": "The HTTP status code"
+				},
+				{
+					"name": "headers",
+					"value": "$.headers",
+					"metaName": "Headers",
+					"metaDescription": "Key-value pairs of headers"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.response",
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set HTTP Response"
+		},
+		"update.success": {
+			"type": "nodehandler://axway-flow/http",
+			"name": "Updated (HTTP 204)",
+			"method": "setresponse",
+			"parameters": [
+				{
+					"name": "status",
+					"value": "204",
+					"type": "number",
+					"metaName": "Status",
+					"metaDescription": "The HTTP status code"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.response",
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set HTTP Response"
+		},
+		"response.error": {
+			"type": "nodehandler://axway-flow/http",
+			"name": "Bad Request (HTTP 400)",
+			"method": "setresponse",
+			"parameters": [
+				{
+					"name": "status",
+					"value": "400",
+					"type": "number",
+					"metaName": "Status",
+					"metaDescription": "The HTTP status code"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.response",
+					"metaName": "Next"
+				}
+			},
+			"metaMethod": "Set HTTP Response"
+		}
+	}
+}

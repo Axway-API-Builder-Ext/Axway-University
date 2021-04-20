@@ -1,0 +1,25 @@
+{
+  "name": "music-service",
+  "version": "0.1.0",
+  "description": "",
+  "main": "app.js",
+  "service": {"env_id":"","org_id":""},
+  "keywords": [
+  ],
+  "author": "",
+  "maintainers": [
+  ],
+  "contributors": [
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "preferGlobal": false,
+  "dependencies": {
+    "appc-logger": "^1.1.16",
+    "express": "^4.15.5"
+  },
+  "license":"",
+  "private": true
+}
