@@ -1,0 +1,35 @@
+flow-nodes:
+  sample:
+    name: Hello World
+    icon: icon.svg
+    description: Example flow-node to say hello.
+    category: general
+    methods:
+      hello: # This same key is used in `actions.js`
+        name: Say Hello
+        description: Generates a greeting.
+        parameters:
+          name:
+            name: Name
+            description: The name of the person to greet.
+            required: true
+            initialType: string
+            schema:
+              type: string
+        # "Next" (next) output
+        returns:
+          name: Next
+          description: The operation was successful.
+          context: $.hello
+          schema:
+            type: string
+        # "Error" (error) output
+        throws:
+          name: Error
+          description: An unexpected error was encountered.
+          context: $.error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
