@@ -5,7 +5,7 @@ In this section, we introduce you to the Flow Editor. This is where you develop 
 By the end of this section, you should have a good understanding of API Builder flows, and how to connect API Builder to other systems. These are the lessons:
 
 1. Introduction to the Flow Editor
-In this lesson, we introduce you to the Flow Editor, and how we represent the data you process using flows. The [greeting project] is the project we use in the demo.
+In this lesson, we introduce you to the Flow Editor, and how we represent the data you process using flows. The [greeting project](https://github.com/Axway-API-Builder-Ext/Axway-University/tree/main/section-2/greeting-project) is the project we use in the demo.
 
 2. The REST Connector
 Here, we download the OpenAPI specification for the Open Weather online service and automatically generate a REST connector from it. The [weather-app](https://github.com/Axway-API-Builder-Ext/Axway-University/tree/main/section-2/weather-app) project includes the OpenAPI specification, but you need to register and get your own API key to try it out.
