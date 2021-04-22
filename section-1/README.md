@@ -15,4 +15,4 @@ This video introduces the basic concepts of API Builder, such as flows, triggers
 Here, we install NodeJS, NPM, and the Axway CLI. We also recommend installing Docker and Postman for some of the later examples.
 
 5. Your First Project
-Now that we're ready, we install API Builder and create your first project. Each project comes with a sample flow, so we test that the flow works.
+Now that we're ready, we install API Builder and create your first project. Each project comes with a sample flow, so we test that the flow works. You can see an example here: [first-project](https://github.com/Axway-API-Builder-Ext/Axway-University/tree/main/section-1/first-project).
