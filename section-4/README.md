@@ -2,7 +2,7 @@
 
 Now that we have working API Builder projects, we need to be able to deploy them in production. In this section, we will dockerize and API Builder project, and deploy it in a Kubernetes cluster. We will also introduce how we put projects into source control, and how to create your own automated regression tests.
 
-All of the videos below use the same project: [source-control-project](https://github.com/Axway-API-Builder-Ext/Axway-University/tree/main/section-4)
+All of the videos below use the same project: [source-control-project](https://github.com/Axway-API-Builder-Ext/Axway-University/tree/main/section-4) with the exception of Automated Regression Testing.
 
 The lessons in this section are:
 
@@ -20,4 +20,4 @@ We dockerize a project, and deploy it in a Kubernetes cluster running in the clo
 
 4. Automated Regression Testing
 
-Automated testing is a crucial so that you can implement new functionality with confidence, and safely pick up API Builder updates. Here, we extend the exist sample tests to account for new functionality.
+Automated testing is a crucial so that you can implement new functionality with confidence, and safely pick up API Builder updates. Here, we extend the exist sample tests to account for new functionality. You can find the project for this here: [regression-tester](https://github.com/Axway-API-Builder-Ext/Axway-University/tree/main/section-4/regression-tester)
