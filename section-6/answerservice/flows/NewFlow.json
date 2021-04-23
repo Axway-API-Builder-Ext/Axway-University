@@ -93,7 +93,7 @@
 				"next": {
 					"context": "$.text",
 					"routes": [
-						"test-plugin.1"
+						"fn-answerbot.1"
 					],
 					"metaName": "Next"
 				},
@@ -134,8 +134,8 @@
 			},
 			"metaMethod": "Log Message"
 		},
-		"test-plugin.1": {
-			"type": "nodehandler://api-builder-plugin-fn-answerbot/test-plugin",
+		"fn-answerbot.1": {
+			"type": "nodehandler://api-builder-plugin-fn-answerbot/fn-answerbot",
 			"name": "Answer question",
 			"method": "answer",
 			"parameters": [
